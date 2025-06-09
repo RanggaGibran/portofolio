@@ -5,9 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "npx serve@latest out",
-    "lint": "next lint",
-    "pages:build": "next build"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -69,5 +68,8 @@
     "typescript": "5.2.2",
     "vaul": "^0.9.9",
     "zod": "^3.23.8"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
