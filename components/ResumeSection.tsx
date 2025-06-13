@@ -23,37 +23,31 @@ const skillsData = [
 
 const experienceData = [
   {
-    role: 'Senior Full Stack Developer',
-    company: 'Tech Innovations Inc.',
-    duration: '2021 - Present',
-    description: 'Leading development of enterprise applications using C#, React, and TypeScript. Managing a team of developers and implementing CI/CD pipelines.',
+    role: 'Staff PHL',
+    company: 'Badan Pengelola Usaha UNRI',
+    duration: '2023 1 Mei - 31 Desember 2023',
+    description: 'Managing and maintaining critical server infrastructure to support business operations. Demonstrated excellent communication skills in effectively interacting with both technical and non-technical teams.',
   },
   {
-    role: 'Full Stack Developer',
-    company: 'Digital Solutions Ltd.',
-    duration: '2018 - 2021',
-    description: 'Developed and maintained web applications using C# and JavaScript. Implemented RESTful APIs and worked with SQL databases.',
+    role: 'Staff Kontrak BPU',
+    company: 'Badan Pengelola Usaha UNRI',
+    duration: '2022 15 Jan - 25 April 2023',
+    description: 'Responsible for server management and system administration tasks. Collaborated with cross-functional teams to ensure optimal system performance.',
   },
   {
-    role: 'Junior Software Engineer',
-    company: 'WebTech Systems',
-    duration: '2016 - 2018',
-    description: 'Assisted in the development of web applications. Worked on front-end components using JavaScript and back-end logic with Python.',
+    role: 'Server Manager',
+    company: 'Server Management',
+    duration: '2018 09 Oct - 1 November 2021',
+    description: 'Led server management initiatives and infrastructure maintenance. Implemented robust monitoring systems and troubleshooting protocols.',
   },
 ];
 
 const educationData = [
   {
-    degree: 'Master of Computer Science',
-    institution: 'University of Technology',
-    duration: '2014 - 2016',
-    description: 'Specialized in Software Engineering and Distributed Systems.',
-  },
-  {
-    degree: 'Bachelor of Computer Science',
-    institution: 'State University',
-    duration: '2010 - 2014',
-    description: 'Graduated with honors. Focused on programming languages and algorithm design.',
+    degree: 'Vocational High School',
+    institution: 'SMK Labor Binaan FKIP UNRI',
+    duration: '2017-2020',
+    description: 'Focused on technical and practical skills in computer science and information technology.',
   },
 ];
 
@@ -72,9 +66,16 @@ const ResumeSection = () => {
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
               My professional experience, education, and technical skills.
             </p>
-            <Button className="group">
-              <Download className="mr-2 h-4 w-4 group-hover:-translate-y-1 transition-transform" />
-              Download CV
+            <Button className="group" asChild>
+              <a 
+                href="https://cdn.pintarnya.com/jobseekers/8752078/cv/20250521010253_95d99d75-e24e-444e-87c6-2f204ff9ebbf.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center"
+              >
+                <Download className="mr-2 h-4 w-4 group-hover:-translate-y-1 transition-transform" />
+                Download CV
+              </a>
             </Button>
           </motion.div>
         </div>
