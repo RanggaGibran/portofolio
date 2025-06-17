@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { ExternalLink, Github, Star, GitFork, AlertCircle } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { ExternalLink, Github, Star, GitFork, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { fetchGithubRepos } from '@/lib/github';
@@ -23,22 +22,22 @@ const GithubSection = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const getRepos = async () => {
-      try {
-        setIsLoading(true);
-        const data = await fetchGithubRepos('RanggaGibran');
-        setRepos(data);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching repos:', err);
-        setError('Failed to load repositories. Please try again later.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const loadRepos = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const data = await fetchGithubRepos('RanggaGibran');
+      setRepos(data);
+    } catch (err) {
+      console.error('Error loading repos:', err);
+      setError('Unable to load repositories at the moment');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    getRepos();
+  useEffect(() => {
+    loadRepos();
   }, []);
 
   const getLanguageColor = (language: string) => {
@@ -55,119 +54,131 @@ const GithubSection = () => {
       HTML: 'bg-red-500',
       CSS: 'bg-blue-300',
       PHP: 'bg-indigo-500',
+      Markdown: 'bg-gray-600',
     };
     
     return colors[language] || 'bg-gray-500';
   };
 
   return (
-    <section id="github" className="py-24 md:py-32 bg-muted/50">
+    <section id="github" className="py-16 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="gradient-text">GitHub Projects</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Check out some of my recent projects and contributions on GitHub.
-            </p>
-          </motion.div>
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+            GitHub Projects
+          </h2>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Explore my latest projects and contributions
+          </p>
+          
+          {error && (
+            <div className="mt-4 flex items-center justify-center gap-4">
+              <p className="text-red-500">{error}</p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={loadRepos}
+                className="rounded-full"
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Retry
+              </Button>
+            </div>
+          )}
         </div>
 
         {isLoading ? (
-          <div className="flex justify-center items-center min-h-[300px]">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary border-t-transparent"></div>
-          </div>
-        ) : error ? (
-          <div className="flex flex-col items-center justify-center min-h-[300px] text-center">
-            <AlertCircle className="h-16 w-16 text-destructive mb-6" />
-            <p className="text-xl text-muted-foreground max-w-md mb-6">{error}</p>
-            <Button asChild variant="outline" size="lg" className="rounded-full">
-              <a 
-                href="https://github.com/RanggaGibran?tab=repositories" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-lg"
-              >
-                Visit GitHub Profile
-              </a>
-            </Button>
+          <div className="flex justify-center items-center min-h-[400px]">
+            <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {repos.map((repo, index) => (
-              <motion.div
-                key={repo.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <Card className="h-full flex flex-col card-hover">
-                  <CardHeader>
-                    <CardTitle className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        <Github className="h-6 w-6 text-primary" />
-                        <span className="text-xl truncate">{repo.name}</span>
-                      </div>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-grow">
-                    <p className="text-lg text-muted-foreground mb-6 line-clamp-3">
-                      {repo.description || 'No description provided.'}
-                    </p>
-                    
-                    {repo.language && (
-                      <div className="flex items-center gap-3">
-                        <span className={`h-4 w-4 rounded-full ${getLanguageColor(repo.language)}`}></span>
-                        <span className="text-base font-medium">{repo.language}</span>
-                      </div>
-                    )}
-                  </CardContent>
-                  <CardFooter className="flex justify-between items-center">
-                    <div className="flex gap-6">
-                      <div className="flex items-center gap-2">
-                        <Star className="h-5 w-5 text-yellow-500" />
-                        <span className="text-base">{repo.stargazers_count}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <GitFork className="h-5 w-5 text-primary" />
-                        <span className="text-base">{repo.forks_count}</span>
-                      </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {repos.map((repo) => (
+              <Card key={repo.id} className="h-full flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-3">
+                    <Github className="h-6 w-6 text-blue-500" />
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white truncate">
+                      {repo.name}
+                    </h3>
+                  </CardTitle>
+                </CardHeader>
+                
+                <CardContent className="flex-grow">
+                  <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+                    {repo.description || 'No description provided.'}
+                  </p>
+                  
+                  {repo.language && (
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className={`h-3 w-3 rounded-full ${getLanguageColor(repo.language)}`}></div>
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {repo.language}
+                      </span>
                     </div>
-                    <Button size="lg" variant="outline" className="rounded-full" asChild>
-                      <a 
-                        href={repo.html_url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2"
-                      >
-                        View <ExternalLink className="h-4 w-4" />
-                      </a>
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </motion.div>
+                  )}
+
+                  {repo.topics && repo.topics.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {repo.topics.slice(0, 3).map((topic) => (
+                        <span 
+                          key={topic}
+                          className="px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full"
+                        >
+                          {topic}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+                
+                <CardFooter className="flex justify-between items-center">
+                  <div className="flex gap-4">
+                    <div className="flex items-center gap-1">
+                      <Star className="h-4 w-4 text-yellow-500" />
+                      <span className="text-sm text-gray-600 dark:text-gray-300">
+                        {repo.stargazers_count}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <GitFork className="h-4 w-4 text-gray-500" />
+                      <span className="text-sm text-gray-600 dark:text-gray-300">
+                        {repo.forks_count}
+                      </span>
+                    </div>
+                  </div>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="rounded-full" 
+                    asChild
+                  >
+                    <a 
+                      href={repo.html_url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2"
+                    >
+                      View <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </Button>
+                </CardFooter>
+              </Card>
             ))}
           </div>
         )}
 
-        <div className="mt-16 text-center">
+        <div className="mt-12 text-center">
           <Button
             size="lg"
-            className="rounded-full text-lg px-8 shadow-lg shadow-primary/20 hover:shadow-primary/40"
+            className="rounded-full bg-blue-500 hover:bg-blue-600 text-white px-8 py-3"
             asChild
           >
             <a 
               href="https://github.com/RanggaGibran?tab=repositories" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="flex items-center gap-3"
+              className="flex items-center gap-2"
             >
               <Github className="h-5 w-5" />
               View All Repositories
