@@ -114,7 +114,7 @@ const ResumeSection = () => {
               asChild
             >
               <a 
-                href="https://cdn.pintarnya.com/jobseekers/8752078/cv/20250521010253_95d99d75-e24e-444e-87c6-2f204ff9ebbf.pdf" 
+                href="https://cdn.pintarnya.com/jobseekers/8752078/cv/20250618025444_b49a0606-c0d0-4222-922f-7b30a735bf5d.pdf" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center"
